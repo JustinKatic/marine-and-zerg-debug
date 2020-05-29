@@ -10,8 +10,6 @@ public:
 	~Zergling();
 
 	int attack();
-	void takeDamage(int damage);
-	vector<Zergling> swarm;
-	bool zerglingAlive(vector<Zergling> swarm);
+
 };
 

@@ -18,7 +18,9 @@ int Entity::attack()
 
 void Entity::takeDamage(int damage)
 {
-	std::cout << "Base TakeDamage()" << std::endl;
+	health -= damage;
+	if (health < 0)
+		health = 0;
 }
 
 bool Entity::isAlive()

@@ -10,9 +10,6 @@ public:
 	~Marine();
 
 	int attack();
-	void takeDamage(int damage) override;
-	bool marineAlive(vector<Marine> squad);
 
-	vector<Marine> squad;
 };
 

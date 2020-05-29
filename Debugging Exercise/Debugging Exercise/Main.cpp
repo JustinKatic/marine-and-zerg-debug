@@ -25,84 +25,95 @@ Marine marine;
 Zergling zergling;
 
 
+bool IsGroupAlive(vector<Entity> group)
+{
+	return group.size() > 0;
+}
+
 int main()
 {
+	//random time seed
 	srand(time(nullptr));
+	vector<Entity> squad;
+	vector<Entity> swarm;
 
+	// Set up the Squad and the Swarm at their initial sizes listed above
 	int squadSize = 10;
 	int swarmSize = 20;
 
-	// Set up the Squad and the Swarm at their initial sizes listed above
-
+	//populates the vector 
 	for (size_t i = 0; i < squadSize; i++)
 	{
 		Marine m;
-		marine.squad.push_back(m);
+		squad.push_back(m);
 	}
 
 	for (size_t i = 0; i < swarmSize; i++)
 	{
 		Zergling z;
-		zergling.swarm.push_back(z);
+		swarm.push_back(z);
 	}
 
 	cout << "A squad of marines approaches a swarm of Zerglings and opens fire! The Zerglings charge!" << endl;
 
 
-	while (marine.marineAlive(marine.squad) && zergling.zerglingAlive(zergling.swarm)) // If anyone is left alive to fight . . .
+	while (IsGroupAlive(squad) && IsGroupAlive(swarm)) // If anyone is left alive to fight . . .
 	{
-		
-		{
-			for (vector<Marine>::iterator i = marine.squad.begin(); i != marine.squad.end(); ++i) // loop through zerglings
-			{
-				if (!marine.marineAlive(marine.squad) || !zergling.zerglingAlive(zergling.swarm)) // if there's at least one zergling && atleast one marine alive
-				{
-					break;
-				}
-				cout << "A marine attacks for " << i->attack() << " damage." << endl;
-				zergling.swarm.begin()->takeDamage(i->attack());
-				if (zergling.swarm.begin()->isAlive())
-				{
-					cout << " zergling lives" << endl;
-					cout << "zergling current health is " << zergling.swarm.begin() -> health << endl << endl;
-				}
-				else
-				{
-					zergling.swarm.erase(zergling.swarm.begin());
-					cout << "The zergling succumbs to his wounds." << endl;
-					cout << "the number of zergling left is :" << zergling.swarm.size() << endl << endl;
-				}
-			}
-		}
-		
-		{
-			for (vector<Zergling>::iterator i = zergling.swarm.begin(); i != zergling.swarm.end(); ++i) // loop through zerglings
-			{
-				if (!zergling.zerglingAlive(zergling.swarm) || !marine.marineAlive(marine.squad)) // if there's at least one zergling && atleast one marine alive
-				{
-					break;
-				}
-				cout << "A zergling attacks for " << i->attack() << " damage." << endl;
-				marine.squad.begin()->takeDamage(i->attack());
-				if (marine.squad.begin()->isAlive())
-				{
-					cout << " marine lives" << endl;
-					cout << "marine current health is " << marine.squad.begin() ->health << endl << endl;
-				}
-				else
-				{
-					marine.squad.erase(marine.squad.begin());
-					cout << "The marine succumbs to his wounds." << endl;
-					cout << "the number of marines left is :" << marine.squad.size() << endl << endl;
 
-				}
+		for (vector<Entity>::iterator i = squad.begin(); i != squad.end(); ++i) // loop through zerglings
+		{
+			if (!IsGroupAlive(squad) || !IsGroupAlive(swarm)) // if there's at least one zergling && atleast one marine alive
+			{
+				break;
+			}
+			cout << "A marine attacks for " << marine.attack() << " damage." << endl;
+			//swawm in first pos of vector takes dmg from marine
+			swarm.begin()->takeDamage(marine.attack());
+
+			//if zergling didnt die 
+			if (swarm.begin()->isAlive())
+			{
+				cout << " zergling lives" << endl;
+				cout << "zergling current health is " << swarm.begin()->health << endl << endl;
+			}
+			//if zergling died
+			else
+			{
+				swarm.erase(swarm.begin());
+				cout << "The zergling succumbs to his wounds." << endl;
+				cout << "the number of zergling left is :" << swarm.size() << endl << endl;
 			}
 		}
+
+
+
+		for (vector<Entity>::iterator i = swarm.begin(); i != swarm.end(); ++i) // loop through zerglings
+		{
+			if (!IsGroupAlive(swarm) || !IsGroupAlive(squad))// if there's at least one zergling && atleast one marine alive
+			{
+				break;
+			}
+			cout << "A zergling attacks for " << zergling.attack() << " damage." << endl;
+			squad.begin()->takeDamage(zergling.attack());
+			if (squad.begin()->isAlive())
+			{
+				cout << " marine lives" << endl;
+				cout << "marine current health is " << squad.begin()->health << endl << endl;
+			}
+			else
+			{
+				squad.erase(squad.begin());
+				cout << "The marine succumbs to his wounds." << endl;
+				cout << "the number of marines left is :" << squad.size() << endl << endl;
+
+			}
+		}
+
 	}
 
 	// Once one team is completely eliminated, the fight ends and one team wins
 	cout << "The fight is over. ";
-	if (marine.marineAlive(marine.squad))
+	if (IsGroupAlive(squad))
 	{
 		cout << "The Marines win." << endl;
 	}
@@ -110,6 +121,7 @@ int main()
 	{
 		cout << "The Zerg win." << endl;
 	}
+	system("pause");
 }
 
 
